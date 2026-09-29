@@ -1,26 +1,31 @@
-USE CollegeDB;
+SET SERVEROUTPUT ON;
 
-DROP PROCEDURE IF EXISTS DisplayStudents;
+DECLARE
+    CURSOR student_cursor IS
+        SELECT StudentID, StudentName, DepartmentID
+        FROM Student;
 
-DELIMITER $$
+    v_student_id   Student.StudentID%TYPE;
+    v_student_name Student.StudentName%TYPE;
+    v_department_id Student.DepartmentID%TYPE;
 
-CREATE PROCEDURE DisplayStudents()
 BEGIN
+    OPEN student_cursor;
 
-    -- Declare variables
+    LOOP
+        FETCH student_cursor
+        INTO v_student_id, v_student_name, v_department_id;
 
-    -- Declare cursor
+        EXIT WHEN student_cursor%NOTFOUND;
 
-    -- Declare NOT FOUND handler
+        DBMS_OUTPUT.PUT_LINE(
+            'Student ID: ' || v_student_id ||
+            ', Student Name: ' || v_student_name ||
+            ', Department ID: ' || v_department_id
+        );
+    END LOOP;
 
-    -- Open cursor
+    CLOSE student_cursor;
+END;
+/
 
-    -- Fetch records using a loop
-
-    -- Close cursor
-
-END $$
-
-DELIMITER ;
-
-CALL DisplayStudents();
